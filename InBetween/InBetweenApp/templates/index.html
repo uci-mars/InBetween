@@ -1,13 +1,13 @@
+
+<!DOCTYPE html>
 {% load static %}
 
 <html>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-<link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet" type="text/css">
 <style>
 h1 {
   font-family: Lobster;
 }
-
 .form-group {
   text-align: center;
 }
@@ -16,15 +16,19 @@ html,body{
 	height:100%;
 	background:#111;
 }
-
 html{
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
-
 body{
   font:normal 75% Arial, Helvetica, sans-serif;
+  text-align:center;
+
 }
 
+.form-group{
+  color:white;
+}
+.
 canvas{
   display:block;
   vertical-align:bottom;
@@ -38,42 +42,46 @@ canvas{
   background-position: 50% 50%;
   background-repeat: no-repeat;
 }
-
-</style>
-
- <head>
+</style> 
+<head>
    <meta charset="UTF-8">
    <title>Hewwo world! owo</title>
+   <!-- <style>
+     #map{
+       height:480px;
+       width:50%;
+     }
+     </style> -->
  </head>
- <body>
+ <body>z
 
-
-
-
-  <div class="row">
-  <div class="col-6 col-md-4" style="background-color: pink; text-align: center;">
+   <form method="post">
+<div class="row align-items-center">
+  <div class="col-6 col-md-4"></div>
+  <div class="col-6 col-md-4 align-items-center">
   <div class="form-group">
-
-    <div class="col-sm-8">
-    <h1 style="text-align: center;">InBetween</h1>
-    <form>
-      <p style="text-align: center;">Point A</p>
-      <input type="pointA" class="form-control" id="pointA" aria-describedby="emailHelp" placeholder="Enter Address">
-      <p></p>
-      <p style="text-align: center;">Point B</p>
-      <input type="pointB" class="form-control" id="pointB" placeholder="Enter Address">
-      <p></p>
-      <p style="text-align: center;">Keyword</p>
-      <input type="keyword" class="form-control" id="keyword" placeholder="I'm feeling lucky!">
-    </form>
+       <h1 style="text-align: center; color:white">InBetween</h1>
+    {% csrf_token %}
+    {{formA.as_p}}
+    <!-- <input type="pointA" class="form-control" id="pointA" aria-describedby="emailHelp" placeholder="Enter Address"> -->
     <p></p>
-    <button type="submit" class="btn btn-primary">Meet in the middle (ﾉ^ヮ^)ﾉ*:・ﾟ✧</button>
+    {% csrf_token %}
+    {{formB.as_p}}
+    <!-- <input type="pointB" class="form-control" id="pointB" placeholder="Enter Address"> -->
+    {% csrf_token %}
+    {{formKey.as_p}}
   </div>
+  <div class="col-6 col-md-4"></div>
+  <button type=submit class="btn btn-primary">Meet in the middle (ﾉ^ヮ^)ﾉ*:・ﾟ✧</button>
+</div>
+</div>
 
-  </div>
-  </div>
+</form>
+<h3>{{loc_a}}</h3>
+<h3>{{loc_b}}</h3>
+<h3>{{middle}}</h3>
 
-  <div class="col-12 col-md-8">
+   <div class="col-12 col-md-8">
 
     <!-- count particles -->
     <div class="count-particles">
@@ -91,10 +99,5 @@ canvas{
 
 
   </div>
-</div>
-
-
-
-
  </body>
 </html>
