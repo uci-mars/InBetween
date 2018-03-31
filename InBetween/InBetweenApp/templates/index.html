@@ -58,7 +58,7 @@ canvas{
 
  <head>
    <meta charset="UTF-8">
-   <title>Hewwo world! owo</title>
+   <title>inBetween</title>
  </head>
  <body>
 
@@ -69,7 +69,8 @@ canvas{
 
   <div class="col-6 col-md-3" style="background-color: #41516e; text-align: center; opacity: 40%;">
   <div class="form-group" style="margin-top: 30%;">
-       <h1 style="text-align: center; color:white; margin-bottom: 32px; margin-left: 5%;">InBetween</h1>
+    <img src={% static "inbetween.png" %} style="height:100px; width:100px; margin-left: 5%;" align="middle"></img>
+       <h1 style="text-align: center; color:white; margin-bottom: 32px; margin-left: 5%;">inBetween</h1>
     {% csrf_token %}
     {{formA|crispy}}
     <!-- <input type="pointA" class="form-control" id="pointA" aria-describedby="emailHelp" placeholder="Enter Address"> -->
@@ -98,10 +99,17 @@ canvas{
     <!-- scripts -->
     <script src="{% static "js/particles.js" %}"></script>
     <script src="{% static "js/app.js" %}"></script>
-
+    <script>
+      function activatePlacesSearch(){
+        var input = document.getElementById('search_termA');
+        var autocomplete = new google.maps.places.Autocomplete(input);
+        var input2 = document.getElementById('search_termB');
+        var autocomplete2 = new google.maps.places.Autocomplete(input2);
+      }
     </script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDGB2QWSTFlUJhWI8C0T2p4uOYLEo17x0k&libraries=places&callback=activatePlacesSearch"></script>
 
-</div>
+
 
   </div>
  </body>
