@@ -1,4 +1,5 @@
 {% load static %}
+{% load crispy_forms_tags %}
 
 <html>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -10,11 +11,14 @@ h1 {
 
 .form-group {
   text-align: center;
+  margin-left: 5%
 }
 html,body{
+  position:relative;
 	width:100%;
 	height:100%;
-	background:#111;
+	background:#41516e;
+  overflow: hidden
 }
 
 html{
@@ -29,14 +33,25 @@ canvas{
   display:block;
   vertical-align:bottom;
 }
+
+.form-control{
+  width: 80%;
+  text-align: center;
+  margin: 0 auto;
+}
+.row{
+  height: 100%
+}
+
 #particles-js{
   width: 100%;
   height: 100%;
-  background-color: #b61924;
-  background-image: url('');
+  margin: 0px 0px 0px 0px;
+  background-color: #66ccff;
+  background-image: url('https://images5.alphacoders.com/456/456536.jpg');
   background-size: cover;
   background-position: 50% 50%;
-  background-repeat: no-repeat;
+  background-repeat: repeat;
 }
 
 </style>
@@ -49,36 +64,33 @@ canvas{
 
 
 
+   <form method="post">
+<div class="row">
 
-  <div class="row">
-  <div class="col-6 col-md-4" style="background-color: pink; text-align: center;">
-  <div class="form-group">
+  <div class="col-6 col-md-3" style="background-color: #41516e; text-align: center; opacity: 40%;">
+  <div class="form-group" style="margin-top: 30%;">
+       <h1 style="text-align: center; color:white; margin-bottom: 32px; margin-left: 5%;">InBetween</h1>
+    {% csrf_token %}
+    {{formA|crispy}}
+    <!-- <input type="pointA" class="form-control" id="pointA" aria-describedby="emailHelp" placeholder="Enter Address"> -->
+    {% csrf_token %}
+    {{formB|crispy}}
+    <!-- <input type="pointB" class="form-control" id="pointB" placeholder="Enter Address"> -->
+    {% csrf_token %}
+    {{formKey|crispy}}
 
-    <div class="col-sm-8">
-    <h1 style="text-align: center;">InBetween</h1>
-    <form>
-      <p style="text-align: center;">Point A</p>
-      <input type="pointA" class="form-control" id="pointA" aria-describedby="emailHelp" placeholder="Enter Address">
-      <p></p>
-      <p style="text-align: center;">Point B</p>
-      <input type="pointB" class="form-control" id="pointB" placeholder="Enter Address">
-      <p></p>
-      <p style="text-align: center;">Keyword</p>
-      <input type="keyword" class="form-control" id="keyword" placeholder="I'm feeling lucky!">
-    </form>
-    <p></p>
-    <button type="submit" class="btn btn-primary">Meet in the middle (ﾉ^ヮ^)ﾉ*:・ﾟ✧</button>
-  </div>
 
-  </div>
-  </div>
+  <button type=submit class="btn btn-primary" style="margin-left: 5%;">Let's meet in the middle!</button>
 
-  <div class="col-12 col-md-8">
+  <h3>{{loc_a}}</h3>
+  <h3>{{loc_b}}</h3>
+  <h3>{{middle}}</h3>
 
-    <!-- count particles -->
-    <div class="count-particles">
-      <span class="js-count-particles">--</span> particles
-    </div>
+</div>
+</div>
+
+   <div class="col-12 col-md-9">
+
 
     <!-- particles.js container -->
     <div id="particles-js"></div>
@@ -89,12 +101,8 @@ canvas{
 
     </script>
 
-
-  </div>
 </div>
 
-
-
-
+  </div>
  </body>
 </html>
