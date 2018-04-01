@@ -45,10 +45,20 @@ def index(request):
             places = get_places(data)
 
             details = get_details(data)
+            names = []
+            ratings = []
+            tiers = []
+
+            for name, address, rating, tier in details:
+                name = '<h2>{}</h2><p>{}</p><p>{}</p>'.format(name, address, tier*'$')
+                names.append(name)
+                ratings.append(rating)
+                tiers.append(tier)
+
 
             a_coordinates = get_coordinates(locationA)
             b_coordinates = get_coordinates(locationB)
-            
+
 
             return render(request, 'mapped.html', {
             'formA': formA,
@@ -59,7 +69,9 @@ def index(request):
             'middle': middle,
             'keyword': keyword,
             'places': places,
-            'details': details # name, rating, tier
+            'names': names,
+            'ratings': ratings,
+            'tiers': tiers
         })
     else:
         formA = LocationAForm()
@@ -144,7 +156,7 @@ def get_data(search, midpoint):
         v='20180331',
         ll=cur_location,
         query=query,
-        limit=5
+        limit=7
     )
 
     resp = requests.get(url=url, params=params)
@@ -164,9 +176,9 @@ def get_places(data):
 def get_details(data):
     """Return a list of lists containing the details of each location"""
     details = [] # name, rating, tier
-    for item in data['response']['groups'][0]['items']:
-        try:
-            details.append([0,item['venue']['rating'],item['venue']['price']['tier']])
-        except KeyError:
-            pass
+    try:
+        for item in data['response']['groups'][0]['items']:
+            details.append([item['venue']['name'], ' '.join(item['venue']['location']['formattedAddress']),item['venue']['rating'],item['venue']['price']['tier']])
+    except KeyError:
+        details.append(['Location', 0, 0])
     return details

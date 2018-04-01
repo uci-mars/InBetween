@@ -20,6 +20,10 @@ h1 {
   font-family: Lobster;
 }
 
+h2 {
+  font-size: 14px;
+}
+
 .form-group {
   text-align: center;
   margin-left: 5%
@@ -73,7 +77,7 @@ canvas{
 
   <div class="col-6 col-md-3" style="background-color: #273041; text-align: center; opacity: 40%;">
   <div class="form-group" style="margin-top: 30%;">
-    <img src="{% static "test1.png" %}" style="height:100px; width:100px; margin-left: 5%;" align="middle"></img>
+    <a href=""><img src="{% static "test1.png" %}" style="height:100px; width:100px; margin-left: 5%;" align="middle"></img></a>
        <h1 style="text-align: center; color:white; margin-bottom: 32px; margin-left: 5%;">inBetween</h1>
 
     {% csrf_token %}
@@ -110,9 +114,14 @@ canvas{
              return type;
            }
            function initMap() {
+             var input = document.getElementById('search_termA');
+             var autocomplete = new google.maps.places.Autocomplete(input);
+             var input2 = document.getElementById('search_termB');
+             var autocomplete2 = new google.maps.places.Autocomplete(input2);
+
              var m = {{middle}};
              var map = new google.maps.Map(document.getElementById('map'), {
-             zoom: 10,
+             zoom: 13,
              center: {'lat': m[0], 'lng': m[1]},
              styles: [
                  {elementType: 'geometry', stylers: [{color: '#242f3e'}]},
@@ -209,19 +218,25 @@ canvas{
              };
              var coords = {{places}};
              var locations = [];
-             for (i = 0; i < coords.length; i++) {
-               locations.push({
-                 position: new google.maps.LatLng(coords[i][0], coords[i][1]),
-                 type: getType({{details}}[i][2])
-               });
-             }
-             locations.forEach(function(location) {
-               var marker = new google.maps.Marker({
-                 position: location.position,
-                 icon: icons[location.type].icon,
-                 map: map
-               });
-             });
+            for (i = 0; i < coords.length; i++) {
+              locations.push({
+                position: new google.maps.LatLng(coords[i][0], coords[i][1]),
+                type: getType({{ratings}}[i])
+              });
+            }
+            var index = 0;
+            var names = {{names|safe}};
+
+            locations.forEach(function(location) {
+              var marker = new google.maps.Marker({
+                position: location.position,
+                icon: icons[location.type].icon,
+                map: map
+              });
+              attachInfo(marker, names[index]);
+              index++;
+            });
+
              var locationA = new google.maps.LatLng({{loc_a}}[0], {{loc_a}}[1]);
              var locationB = new google.maps.LatLng({{loc_b}}[0], {{loc_b}}[1]);
              var locationM = new google.maps.LatLng(m[0], m[1]);
@@ -237,22 +252,34 @@ canvas{
                position: locationM,
                map: map
              });
+             attachInfo(markerA, 'You are here');
+              attachInfo(markerB, 'Your friend is here');
+              attachInfo(markerM, 'Midway point');
+
+              };
+
+              function attachInfo(marker, info) {
+              var infowindow = new google.maps.InfoWindow({
+              content: info
+              });
+
+              marker.addListener('mouseover', function() {
+              infowindow.open(marker.get('map'), marker);
+              });
+
+              marker.addListener('mouseout', function() {
+              infowindow.close(marker.get('map'), marker);
+              });
+
+
            };
          </script>
          <script async defer
-         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD_j0Y_vKABSggxFNwCIPmfDNEaKKZ7tHg&callback=initMap">
+         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD_j0Y_vKABSggxFNwCIPmfDNEaKKZ7tHg&callback=initMap&libraries=places">
          </script>
 
      <div>
-    <script>
-      function activatePlacesSearch(){
-        var input = document.getElementById('search_termA');
-        var autocomplete = new google.maps.places.Autocomplete(input);
-        var input2 = document.getElementById('search_termB');
-        var autocomplete2 = new google.maps.places.Autocomplete(input2);
-      }
-    </script>a
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDGB2QWSTFlUJhWI8C0T2p4uOYLEo17x0k&libraries=places&callback=activatePlacesSearch"></script>
+
 
 
 
