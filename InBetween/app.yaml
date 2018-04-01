@@ -1,6 +1,6 @@
 runtime: python
 env: flex
-entrypoint: gunicorn -b :$PORT InBetween.wsgis
+entrypoint: gunicorn -b :$PORT InBetween.wsgi
 
 beta-settings:
         cloud-sql-instances: strange-bird-199717:us-west1:strange-test
