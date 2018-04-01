@@ -10,4 +10,4 @@ class LocationBForm(forms.Form):
 
 class KeywordForm(forms.Form):
     keyword = forms.CharField(label='', required=False)
-    keyword.widget.attrs.update({'align': 'center', 'placeholder':'Keyword'})
+    keyword.widget.attrs.update({'align': 'center', 'placeholder':'FIND tacos, boba, hotel, sushi, etc.'})

@@ -1,9 +1,8 @@
 from django.shortcuts import render
 
-from InBetweenApp.forms import LocationAForm, LocationBForm, KeywordForm
+from .forms import LocationAForm, LocationBForm, KeywordForm
 import requests
 import math
-
 
 API_KEY = 'AIzaSyCDV8b-Ht-AF1LWYjydiKmdWL9KQbygYkc'
 # Create your views here.
@@ -27,6 +26,7 @@ def index(request):
             payload = {'origin':locationA, 'destination':locationB, 'key':API_KEY}
             url = 'https://maps.googleapis.com/maps/api/directions/json?'
 
+
             # get response from Google Maps Directions API
             search_res = requests.get(url, params=payload)
             search_res.raise_for_status()
@@ -44,16 +44,22 @@ def index(request):
             data = get_data(keyword, middle)
             places = get_places(data)
 
+            details = get_details(data)
+
+            a_coordinates = get_coordinates(locationA)
+            b_coordinates = get_coordinates(locationB)
+            
 
             return render(request, 'mapped.html', {
             'formA': formA,
             'formB': formB,
             'formKey': formKey,
-            'loc_a': loc_a,
-            'loc_b': loc_b,
+            'loc_a': a_coordinates,
+            'loc_b': b_coordinates,
             'middle': middle,
             'keyword': keyword,
-            'places': places
+            'places': places,
+            'details': details # name, rating, tier
         })
     else:
         formA = LocationAForm()
@@ -63,8 +69,25 @@ def index(request):
             'formA': formA,
             'formB': formB,
             'formKey': formKey,
-            'places': (10,30)
-        })
+            })
+
+def get_coordinates(address: str):
+    # Geocoding Google API
+
+    GEO_API_KEY = 'AIzaSyA3BccLUe8jEGbvlb5iKwQnekkEmVYdAkk'
+    geoCoding_url = 'https://maps.googleapis.com/maps/api/geocode/json?'
+
+    payload = {'key': GEO_API_KEY, 'address': address}
+
+    req = requests.get(geoCoding_url, params=payload)
+    req.raise_for_status()
+
+    data = req.json()
+
+    return [data['results'][0]['geometry']['location']['lat'],
+    data['results'][0]['geometry']['location']['lng']]
+
+
 
 
 
@@ -77,7 +100,7 @@ def get_steps(jsonr):
         steps.append([step['distance']['value'], step['start_location'], step['end_location']])
     return steps
 
-def get_midpoint(half_distance: int, steps: [(int, str, str)]) -> (str, str):
+def get_midpoint(half_distance: int, steps: [(int, str, str)]) -> [float, float]:
     """Get the latitude and longitude of best approximating midpoint between two locations"""
     cur_distance = 0
     cur_step = 0
@@ -95,10 +118,18 @@ def get_midpoint(half_distance: int, steps: [(int, str, str)]) -> (str, str):
 
     angle = math.atan(lng_length/lat_length)
 
-    if (endpos[0] > startpos[0] and endpos[1] > startpos[1]) or \
-       (endpos[0] < startpos[0] and endpos[1] > startpos[1]):
-        return (startpos[0]+left_over_distance*math.cos(angle)/111000, startpos[1]+left_over_distance*math.sin(angle)/111000)
-    return (startpos[0]-left_over_distance*math.cos(angle)/111000, startpos[1]-left_over_distance*math.sin(angle)/111000)
+
+    if (startpos[0] < endpos[0]) and (startpos[1] < endpos[1]):
+        return [startpos[0]+left_over_distance*math.cos(angle)/110500, startpos[1]+left_over_distance*math.sin(angle)/110500]
+
+    elif (startpos[0] < endpos[0] and startpos[1] > endpos[1]):
+        return [startpos[0]+left_over_distance*math.cos(angle)/110500, startpos[1]+left_over_distance*math.sin(angle)/110500]
+    return [startpos[0]-left_over_distance*math.cos(angle)/110500, startpos[1]-left_over_distance*math.sin(angle)/110500]
+
+    # if (endpos[0] > startpos[0] and endpos[1] > startpos[1]) or \
+    #    (endpos[0] < startpos[0] and endpos[1] > startpos[1]):
+    #     return (startpos[0]+left_over_distance*math.cos(angle)/111000, startpos[1]+left_over_distance*math.sin(angle)/111000)
+    # return [startpos[0]-left_over_distance*math.cos(angle)/111000, startpos[1]-left_over_distance*math.sin(angle)/111000]
 
 
 def get_data(search, midpoint):
@@ -123,8 +154,19 @@ def get_data(search, midpoint):
 
 
 def get_places(data):
+    """Return a list of lists containing the latitudes and longitudes of nearby locations"""
     places = []
     for item in data['response']['groups'][0]['items']:
-        address = ' '.join(item['venue']['location']['formattedAddress'])
-        places.append(address)
+        places.append([item['venue']['location']['lat'],
+                       item['venue']['location']['lng']])
     return places
+
+def get_details(data):
+    """Return a list of lists containing the details of each location"""
+    details = [] # name, rating, tier
+    for item in data['response']['groups'][0]['items']:
+        try:
+            details.append([0,item['venue']['rating'],item['venue']['price']['tier']])
+        except KeyError:
+            pass
+    return details

@@ -1,9 +1,6 @@
-runtime: python
-env: flex
-entrypoint: gunicorn -b :$PORT InBetween.wsgi
+runtime python
+env flex
+entrypoint gunicorn -b $PORT mysite.wsgiS
 
-beta_settings:
-        cloud_sql_instances: strange-bird-199717:us-west1:strange-test
-
-runtime_config:
-        python_version: 3
+runtime_config
+  python_version 3
