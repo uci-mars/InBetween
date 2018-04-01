@@ -4,6 +4,7 @@ from InBetweenApp.forms import LocationAForm, LocationBForm, KeywordForm
 import requests
 import math
 
+
 API_KEY = 'AIzaSyCDV8b-Ht-AF1LWYjydiKmdWL9KQbygYkc'
 # Create your views here.
 def index(request):
@@ -44,7 +45,7 @@ def index(request):
             places = get_places(data)
 
 
-            return render(request, 'index.html', {
+            return render(request, 'mapped.html', {
             'formA': formA,
             'formB': formB,
             'formKey': formKey,

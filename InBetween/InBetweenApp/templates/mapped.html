@@ -1,0 +1,114 @@
+{% load static %}
+{% load crispy_forms_tags %}
+
+<html>
+<script
+  src="http://code.jquery.com/jquery-3.3.1.js"
+  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+  crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet" type="text/css">
+
+
+
+<style>
+h1 {
+  font-family: Lobster;
+}
+
+.form-group {
+  text-align: center;
+  margin-left: 5%
+}
+html,body{
+  position:relative;
+	width:100%;
+	height:100%;
+	background:#41516e;
+  overflow: hidden
+}
+
+html{
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+body{
+  font:normal 75% Arial, Helvetica, sans-serif;
+}
+
+canvas{
+  display:block;
+  vertical-align:bottom;
+}
+
+.form-control{
+  width: 80%;
+  text-align: center;
+  margin: 0 auto;
+}
+.row{
+  height: 100%
+}
+
+
+}
+
+</style>
+
+ <head>
+   <meta charset="UTF-8">
+   <link rel="shortcut icon" type="image/png" href="https://i.imgur.com/MlCQHil.png"></link>
+   <title>inBetween</title>
+ </head>
+ <body>
+
+
+
+   <form method="post">
+<div class="row">
+
+  <div class="col-6 col-md-3" style="background-color: #41516e; text-align: center; opacity: 40%;">
+  <div class="form-group" style="margin-top: 30%;">
+    <img src="{% static "test1.png" %}" style="height:100px; width:100px; margin-left: 5%;" align="middle"></img>
+       <h1 style="text-align: center; color:white; margin-bottom: 32px; margin-left: 5%;">inBetween</h1>
+
+    {% csrf_token %}
+    {{formA|crispy}}
+    <!-- <input type="pointA" class="form-control" id="pointA" aria-describedby="emailHelp" placeholder="Enter Address"> -->
+    {% csrf_token %}
+    {{formB|crispy}}
+    <!-- <input type="pointB" class="form-control" id="pointB" placeholder="Enter Address"> -->
+    {% csrf_token %}
+    {{formKey|crispy}}
+
+
+  <button type=submit class="btn btn-primary" style="margin-left: 5%;" id="submit">Let's meet in the middle!</button>
+
+
+</div>
+</div>
+
+   <div class="col-12 col-md-9 hidden" id="landing">
+     <iframe
+  width="100%"
+  height="100%"
+  frameborder="0" style="border:0"
+  src="https://www.google.com/maps/embed/v1/place?key=AIzaSyDVsC95XBopeaHy90skN7wpabdN6xMBYXQ
+    &q=Space+Needle,Seattle+WA" allowfullscreen>
+</iframe>
+     <div>
+    <script>
+      function activatePlacesSearch(){
+        var input = document.getElementById('search_termA');
+        var autocomplete = new google.maps.places.Autocomplete(input);
+        var input2 = document.getElementById('search_termB');
+        var autocomplete2 = new google.maps.places.Autocomplete(input2);
+      }
+    </script>a
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDGB2QWSTFlUJhWI8C0T2p4uOYLEo17x0k&libraries=places&callback=activatePlacesSearch"></script>
+
+
+
+  </div>
+ </body>
+</html>
