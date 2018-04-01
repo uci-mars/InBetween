@@ -2,7 +2,6 @@ from django.shortcuts import render
 
 from .forms import LocationAForm, LocationBForm, KeywordForm
 import requests
-import pprint
 import math
 
 API_KEY = 'AIzaSyCDV8b-Ht-AF1LWYjydiKmdWL9KQbygYkc'
@@ -13,10 +12,12 @@ def index(request):
         formB = LocationBForm(request.POST)
         formKey = KeywordForm(request.POST)
 
+
         if formA.is_valid() and formB.is_valid() and formKey.is_valid():
             loc_a = formA.cleaned_data['loc_a']
             loc_b = formB.cleaned_data['loc_b']
             keyword = formKey.cleaned_data['keyword']
+
 
             locationA = loc_a
             locationB = loc_b
@@ -38,6 +39,11 @@ def index(request):
 
             steps = get_steps(json_result)
             middle = get_midpoint(half_distance, steps)
+
+            data = get_data(keyword, middle)
+            places = get_places(data)
+
+
             return render(request, 'index.html', {
             'formA': formA,
             'formB': formB,
@@ -45,7 +51,8 @@ def index(request):
             'loc_a': loc_a,
             'loc_b': loc_b,
             'middle': middle,
-            'keyword': keyword
+            'keyword': keyword,
+            'places': places
         })
     else:
         formA = LocationAForm()
@@ -54,8 +61,11 @@ def index(request):
         return render(request, 'index.html',{
             'formA': formA,
             'formB': formB,
-            'formKey': formKey
+            'formKey': formKey,
+            'places': (10,30)
         })
+
+
 
 
 
@@ -88,4 +98,32 @@ def get_midpoint(half_distance: int, steps: [(int, str, str)]) -> (str, str):
        (endpos[0] < startpos[0] and endpos[1] > startpos[1]):
         return (startpos[0]+left_over_distance*math.cos(angle)/111000, startpos[1]+left_over_distance*math.sin(angle)/111000)
     return (startpos[0]-left_over_distance*math.cos(angle)/111000, startpos[1]-left_over_distance*math.sin(angle)/111000)
-    
+
+
+def get_data(search, midpoint):
+    url = 'https://api.foursquare.com/v2/venues/explore'
+
+    query = search
+    cur_location = str(midpoint)[1:-1]
+
+    params = dict(
+        client_id='G15NBKKGLQULJQJ40W2IIW4KNK2YYO23ULFTQI5QSW1DDISP',
+        client_secret='OOPKKSDWURQS0R1E5RY3C34OE0DJVTEUSQTRWO1MJDLS0IYF',
+        v='20180331',
+        ll=cur_location,
+        query=query,
+        limit=5
+    )
+
+    resp = requests.get(url=url, params=params)
+    data = resp.json()
+
+    return data
+
+
+def get_places(data):
+    places = []
+    for item in data['response']['groups'][0]['items']:
+        address = ' '.join(item['venue']['location']['formattedAddress'])
+        places.append(address)
+    return places
