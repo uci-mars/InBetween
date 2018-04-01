@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from .forms import LocationAForm, LocationBForm, KeywordForm
+from InBetweenApp.forms import LocationAForm, LocationBForm, KeywordForm
 import requests
 import pprint
 import math
@@ -88,4 +88,3 @@ def get_midpoint(half_distance: int, steps: [(int, str, str)]) -> (str, str):
        (endpos[0] < startpos[0] and endpos[1] > startpos[1]):
         return (startpos[0]+left_over_distance*math.cos(angle)/111000, startpos[1]+left_over_distance*math.sin(angle)/111000)
     return (startpos[0]-left_over_distance*math.cos(angle)/111000, startpos[1]-left_over_distance*math.sin(angle)/111000)
-    
