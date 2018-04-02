@@ -25,7 +25,7 @@ SECRET_KEY = '8jr3hr%smorj=zg^+p*h0&2z+5&(4l%1th&w1v3rhnmu@(5o(8'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['strange-bird-199717.appspot.com','127.0.0.1','inbetweenus.net']
+ALLOWED_HOSTS = ['strange-bird-199717.appspot.com','127.0.0.1','inbetweenus.net', 'halfstronaut.com']
 
 
 # Application definition

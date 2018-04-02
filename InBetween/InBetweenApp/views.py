@@ -156,7 +156,8 @@ def get_data(search, midpoint):
         v='20180331',
         ll=cur_location,
         query=query,
-        limit=7
+        limit=7,
+        sortByDistance='true'
     )
 
     resp = requests.get(url=url, params=params)
@@ -180,5 +181,5 @@ def get_details(data):
         for item in data['response']['groups'][0]['items']:
             details.append([item['venue']['name'], ' '.join(item['venue']['location']['formattedAddress']),item['venue']['rating'],item['venue']['price']['tier']])
     except KeyError:
-        details.append(['Location', 0, 0])
+        details.append(['Location', '', 0, 0])
     return details
