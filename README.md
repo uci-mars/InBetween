@@ -2,7 +2,7 @@
 
 ![Screenshot](https://github.com/uci-mars/InBetween/blob/master/inBetween.PNG)
 
-~~Visit http://strange-bird-199717.appspot.com now to try out our application!~~ Under Development
+~~Visit http://strange-bird-199717.appspot.com now to try out our application!~~ **Under Development**
 
 "Meet me halfway, right at the borderline is where I'm going to wait for you" -The Black Eyed Peas
 
